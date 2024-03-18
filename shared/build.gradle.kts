@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    id("com.squareup.sqldelight")
 }
 
 kotlin {
@@ -26,13 +27,26 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
+                implementation("com.squareup.sqldelight:runtime:1.5.3")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }
+        androidMain.dependencies {
+            implementation("com.squareup.sqldelight:android-driver:1.5.3")
+        }
+        iosMain.dependencies {
+            implementation("com.squareup.sqldelight:native-driver:1.5.3")
+        }
     }
 }
-
+sqldelight {
+    database("NoteDatabase") {
+        packageName = "com.example.noteappkmp.database"
+        sourceFolders = listOf("sqldelight")
+    }
+}
 android {
     namespace = "com.example.noteappkmp"
     compileSdk = 34
